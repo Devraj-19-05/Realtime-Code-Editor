@@ -7,7 +7,7 @@ const socket = io("http://localhost:5000");
 const App = () => {
   const [joined, setJoined] = useState(false);
 
-  IdleDeadline(!joined) {
+  if(!joined) {
   return <div>App not Joined</div>;
   };
   return <div>User Joined</div>;
