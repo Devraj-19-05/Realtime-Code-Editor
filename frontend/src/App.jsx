@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import io from 'socket.io-client';
 
-const socket = io("http://localhost:5173");
+const socket = io("http://localhost:5000");
 
 const App = () => {
   const [joined, setJoined] = useState(false);
@@ -10,8 +10,11 @@ const App = () => {
   const [userName, setUserName] = useState("");
 
   const joinRoom = () =>{
-    console.log(roomId, userName);
-  }
+    if (roomId && userName) {
+      socket.emit("join", { roomId, userName});
+      setJoined(true);
+    }
+  };
 
   if(!joined) {
     return (
@@ -35,7 +38,15 @@ const App = () => {
   </div>
     );
   };
-  return <div>User Joined</div>;
+  return <div>
+    <div className="edito-container">
+      <div className="sidebar">
+        <div className="room-info">
+          <h2>Code Room :{roomId}</h2>
+          <button onClick={copyRoomId}>Copy Id</button>
+        </div>
+      </div></div>
+  </div>;
 };
 
 export default App;
