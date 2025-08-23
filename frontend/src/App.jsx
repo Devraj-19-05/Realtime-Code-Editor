@@ -48,11 +48,12 @@ const App = () => {
     );
   };
   return <div>
-    <div className="edito-container">
+    <div className="editor-container">
       <div className="sidebar">
         <div className="room-info">
           <h2>Code Room :{roomId}</h2>
-          <button onClick={copyRoomId}>Copy Id</button>
+          <button onClick={copyRoomId} 
+          className="copy-button">Copy Id</button>
         </div>
         <h3>User in Room:</h3>
         <ul>
