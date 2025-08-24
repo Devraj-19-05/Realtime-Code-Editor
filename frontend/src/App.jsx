@@ -11,6 +11,7 @@ const App = () => {
   const [userName, setUserName] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("");
+  const [copySuccess, setCopySuccess] = useState("");
 
   const joinRoom = () =>{
     if (roomId && userName) {
@@ -19,7 +20,11 @@ const App = () => {
     }
   };
 
-  const copyRoomId =() => {};
+  const copyRoomId =() => {
+    navigator.clipboard.writeText(roomId);
+    setCopySuccess("Copied!");
+    setTimeout(() => setCopySuccess(""), 2000);
+  };
 
   const handleCodeChange = (newCode) => { 
     setCode(newCode);
@@ -38,7 +43,7 @@ const App = () => {
         />
         <input 
         type="text" 
-        placeholder="Your Nme"
+        placeholder="Your Name"
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
         />
@@ -53,7 +58,11 @@ const App = () => {
         <div className="room-info">
           <h2>Code Room :{roomId}</h2>
           <button onClick={copyRoomId} 
-          className="copy-button">Copy Id</button>
+          className="copy-button">
+          Copy Id
+          </button>
+          {copySuccess && <span className="copy-success">{copySuccess}</span>}
+
         </div>
         <h3>User in Room:</h3>
         <ul>
@@ -61,7 +70,10 @@ const App = () => {
           <li>Xyz</li>
         </ul>
         <p className="typeing-indicator">User typeing...</p>
-        <select className="language-selector">
+        <select className="language-selector" 
+        value={language} 
+        onChange={(e) => setLanguage(e.target.value)}
+        >
           <option value="javascript">Javascript</option>
           <option value="python">Python</option>
           <option value="java">Java</option>
