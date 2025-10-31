@@ -161,7 +161,7 @@ button{
 }
 
 button.run-btn{
-  width: 7%;
+  width: 100px;
   margin: 9px;
   margin-bottom: 0;
   background-color: rgb(120, 200, 0);
@@ -179,25 +179,3 @@ button.run-btn{
   font-size: 20px;
   height: 200px;
 }
-
-
-/* 
-@media (max-width: 768px) {
-  .editor-container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    text-align: center;
-  }
-
-  .editor-wrapper {
-    width: 100%;
-  }
-
-  .join-form {
-    width: 90%;
-  }
-}
- */
