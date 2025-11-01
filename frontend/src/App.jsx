@@ -7,9 +7,10 @@ import { userActionState } from "react";
 import {v4 as uuid} from "uuid";
 import { useActionState } from "react";
 
-const socket = io("https://realtime-code-editor-6tin.onrender.com");
+// const socket = io("https://realtime-code-editor-6tin.onrender.com");
+const socket = io("http://localhost:5000");
 
-function App() {
+const App = () => {
   const [joined, setJoined] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
@@ -39,7 +40,7 @@ function App() {
       setLanguage(newLanguage);
     });
 
-    socket.on("codeResponse", (response) => {
+    socket.on("codeResponse", (response)=>{
       setOutput(response.run.output);
     });
 
@@ -101,13 +102,13 @@ function App() {
   const [userInput, setUserInput] = useState("");
 
   const runCode = () => {
-    socket.emit("compileCode", { code, roomId, language, version, input: userInput });
+    socket.emit("compileCode", {code, roomId, language, version, input: userInput });
   };
 
-  const createRoomID = () => {
+  const createRoomID= () => {
     const roomId = uuid();
     setRoomId(roomId);
-  };
+  }
 
   if (!joined) {
     return (
@@ -118,13 +119,15 @@ function App() {
             type="text"
             placeholder="Room Id"
             value={roomId}
-            onChange={(e) => setRoomId(e.target.value)} />
+            onChange={(e) => setRoomId(e.target.value)}
+          />
           <button id="create-room" onClick={createRoomID}>Create Room</button>
           <input
             type="text"
             placeholder="Your Name"
             value={userName}
-            onChange={(e) => setUserName(e.target.value)} />
+            onChange={(e) => setUserName(e.target.value)}
+          />
           <button onClick={joinRoom}>Join Room</button>
         </div>
       </div>
@@ -174,18 +177,20 @@ function App() {
           options={{
             minimap: { enabled: false },
             fontSize: 14,
-          }} />
-        <textarea
-          class="input-console"
-          value={userInput}
-          onChange={e => setUserInput(e.target.value)}
-          placeholder="Enter input here .." />
+          }}
+        />
+        <textarea 
+          class="input-console" 
+          value={userInput} 
+          onChange={e=>setUserInput(e.target.value)} 
+          placeholder="Enter input here .." 
+        />
 
         <button className="run-btn" onClick={runCode}>Execute</button>
         <textarea className="output-console" value={outPut} readOnly placeholder="Output will appear here ..." />
       </div>
     </div>
   );
-}
+};
 
 export default App;
