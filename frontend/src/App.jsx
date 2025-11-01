@@ -4,15 +4,17 @@ import io from "socket.io-client";
 import Editor from "@monaco-editor/react";
 import { userEffect } from "react";
 import { userActionState } from "react";
+import {v4 as uuid} from "uuid";
+import { useActionState } from "react";
 
 const socket = io("https://realtime-code-editor-6tin.onrender.com");
 
-const App = () => {
+function App() {
   const [joined, setJoined] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
-  const [language, setLanguage] = useState("javascript");
-  const [code, setCode] = useState("// start code here");
+  const [language, setLanguage] = useState("python");
+  const [code, setCode] = useState("# start code here");
   const [copySuccess, setCopySuccess] = useState("");
   const [users, setUsers] = useState([]);
   const [typing, setTyping] = useState("");
@@ -37,7 +39,7 @@ const App = () => {
       setLanguage(newLanguage);
     });
 
-    socket.on("codeResponse", (response)=>{
+    socket.on("codeResponse", (response) => {
       setOutput(response.run.output);
     });
 
@@ -74,8 +76,8 @@ const App = () => {
     setJoined(false);
     setRoomId("");
     setUserName("");
-    setCode("// start code here");
-    setLanguage("javascript");
+    setCode("# start code here");
+    setLanguage("python");
   };
 
   const copyRoomId = () => {
@@ -96,8 +98,15 @@ const App = () => {
     socket.emit("languageChange", { roomId, language: newLanguage });
   };
 
+  const [userInput, setUserInput] = useState("");
+
   const runCode = () => {
-    socket.emit("compileCode", {code, roomId, language, version});
+    socket.emit("compileCode", { code, roomId, language, version, input: userInput });
+  };
+
+  const createRoomID = () => {
+    const roomId = uuid();
+    setRoomId(roomId);
   };
 
   if (!joined) {
@@ -109,14 +118,13 @@ const App = () => {
             type="text"
             placeholder="Room Id"
             value={roomId}
-            onChange={(e) => setRoomId(e.target.value)}
-          />
+            onChange={(e) => setRoomId(e.target.value)} />
+          <button id="create-room" onClick={createRoomID}>Create Room</button>
           <input
             type="text"
             placeholder="Your Name"
             value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
+            onChange={(e) => setUserName(e.target.value)} />
           <button onClick={joinRoom}>Join Room</button>
         </div>
       </div>
@@ -166,14 +174,18 @@ const App = () => {
           options={{
             minimap: { enabled: false },
             fontSize: 14,
-          }}
-        />
+          }} />
+        <textarea
+          class="input-console"
+          value={userInput}
+          onChange={e => setUserInput(e.target.value)}
+          placeholder="Enter input here .." />
 
         <button className="run-btn" onClick={runCode}>Execute</button>
         <textarea className="output-console" value={outPut} readOnly placeholder="Output will appear here ..." />
       </div>
     </div>
   );
-};
+}
 
 export default App;
