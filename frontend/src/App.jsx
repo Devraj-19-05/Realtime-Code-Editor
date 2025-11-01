@@ -7,8 +7,7 @@ import { userActionState } from "react";
 import {v4 as uuid} from "uuid";
 import { useActionState } from "react";
 
-// const socket = io("https://realtime-code-editor-6tin.onrender.com");
-const socket = io("http://localhost:5000");
+const socket = io("https://realtime-code-editor-6tin.onrender.com");
 
 const App = () => {
   const [joined, setJoined] = useState(false);
